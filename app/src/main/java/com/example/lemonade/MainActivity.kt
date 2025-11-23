@@ -70,6 +70,8 @@ fun Title(title: String, modifier: Modifier = Modifier) {
 @Composable
 fun MainContent(modifier: Modifier = Modifier) {
     var status by remember { mutableStateOf( value = 0) }
+    var lemonClickCount = 0
+    val maxLemonClickCount = (2..6).random()
 
     val image = when(status) {
         1 -> R.drawable.lemon_squeeze
@@ -104,11 +106,15 @@ fun MainContent(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable(onClick = {
-                    status = when( status ) {
-                        0 -> 1
-                        1 -> 2
-                        2 -> 3
-                        else -> 0
+                    if (status == 1 && lemonClickCount != maxLemonClickCount) {
+                            lemonClickCount++
+                    } else {
+                        status = when (status) {
+                            0 -> 1
+                            1 -> 2
+                            2 -> 3
+                            else -> 0
+                        }
                     }
                 })
         )
