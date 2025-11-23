@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,10 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -64,6 +69,29 @@ fun Title(title: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun MainContent(modifier: Modifier = Modifier) {
+    var status by remember { mutableStateOf( value = 0) }
+
+    val image = when(status) {
+        1 -> R.drawable.lemon_squeeze
+        2 -> R.drawable.lemon_drink
+        3 -> R.drawable.lemon_restart
+        else -> R.drawable.lemon_tree
+    }
+
+    val imageLabel = when(status) {
+        1 -> R.string.lemon_prompt_message
+        2 -> R.string.glass_of_lemonade_prompt_message
+        3 -> R.string.empty_glass_prompt_message
+        else -> R.string.lemon_tree_prompt_message
+    }
+
+    val imageContentDescription = when(status) {
+        1 -> R.string.lemon_image_content_description
+        2 -> R.string.glass_of_lemonade_image_content_description
+        3 -> R.string.empty_glass_image_content_description
+        else -> R.string.lemon_tree_image_content_description
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -71,17 +99,25 @@ fun MainContent(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.lemon_tree),
-            contentDescription = stringResource(id = R.string.lemon_tree_image_content_description),
+            painter = painterResource(id = image),
+            contentDescription = stringResource(id = imageContentDescription),
             modifier = Modifier
                 .fillMaxWidth()
+                .clickable(onClick = {
+                    status = when( status ) {
+                        0 -> 1
+                        1 -> 2
+                        2 -> 3
+                        else -> 0
+                    }
+                })
         )
         Spacer(
             modifier = Modifier
                 .height(height = 16.dp)
         )
         Text(
-            text = stringResource(id = R.string.lemon_tree_prompt_message),
+            text = stringResource(id = imageLabel),
         )
     }
 }
